@@ -19,7 +19,7 @@ public class CalculadoraBasica {
     }
 
     public double division(double a, double b) {
-        if (b == 0) throw new ArithmeticException("División por cero");
+        if (b == 0) throw new ArithmeticException("Division por cero");
         ultimoResultado = a / b;
         return ultimoResultado;
     }

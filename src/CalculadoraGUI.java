@@ -18,7 +18,7 @@ public class CalculadoraGUI extends JFrame {
 
         mainPanel = new JPanel(new CardLayout());
         Colores.estilizarPanel(mainPanel);
-        mainPanel.add(new PanelBasico(this), "Básico");
+        mainPanel.add(new PanelBasico(this), "Basico");
         mainPanel.add(new PanelVector(this), "Vector");
         mainPanel.add(new PanelMatriz(this), "Matriz");
         mainPanel.add(new PanelSistemas(this), "Sistemas");
@@ -26,7 +26,7 @@ public class CalculadoraGUI extends JFrame {
         JPanel menuPanel = new JPanel();
         Colores.estilizarPanel(menuPanel);
 
-        JButton btnBasico = new JButton("Básico");
+        JButton btnBasico = new JButton("Basico");
         JButton btnVector = new JButton("Vectores");
         JButton btnMatriz = new JButton("Matrices");
         JButton btnSistemas = new JButton("Sistemas");
@@ -36,7 +36,7 @@ public class CalculadoraGUI extends JFrame {
         Colores.estilizarBoton(btnMatriz);
         Colores.estilizarBoton(btnSistemas);
 
-        btnBasico.addActionListener(e -> showPanel("Básico"));
+        btnBasico.addActionListener(e -> showPanel("Basico"));
         btnVector.addActionListener(e -> showPanel("Vector"));
         btnMatriz.addActionListener(e -> showPanel("Matriz"));
         btnSistemas.addActionListener(e -> showPanel("Sistemas"));

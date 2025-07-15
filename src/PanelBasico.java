@@ -33,7 +33,7 @@ public class PanelBasico extends JPanel {
         inputPanel.add(labelB);
         inputPanel.add(campoB);
 
-        JButton btnUsarUlt = new JButton("A = Último resultado");
+        JButton btnUsarUlt = new JButton("ANS");
         Colores.estilizarBoton(btnUsarUlt);
         btnUsarUlt.addActionListener(e -> campoA.setText(String.valueOf(frame.getLastResult())));
         inputPanel.add(btnUsarUlt);

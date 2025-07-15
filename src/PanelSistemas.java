@@ -10,6 +10,7 @@ public class PanelSistemas extends JPanel {
     private JTextField[] coefFields;
     private JTextField[] indepFields;
     private JTextArea resultadoArea;
+    private JPanel camposPanel;
 
     public PanelSistemas(CalculadoraGUI frame) {
         this.frame = frame;
@@ -32,19 +33,25 @@ public class PanelSistemas extends JPanel {
         filaTipo.add(tipoSistema);
         inputPanel.add(filaTipo);
 
-        // Inicialización de campos
+   
         coefFields = new JTextField[9];
         indepFields = new JTextField[3];
+        Dimension campoGrande = new Dimension(120, 55); 
         for (int i = 0; i < 9; i++) {
-            coefFields[i] = new JTextField(2);
+            coefFields[i] = new JTextField();
+            coefFields[i].setPreferredSize(campoGrande);
+            coefFields[i].setFont(Colores.FUENTE_MATRIX);
             Colores.estilizarCampoTexto(coefFields[i]);
         }
         for (int i = 0; i < 3; i++) {
-            indepFields[i] = new JTextField(2);
+            indepFields[i] = new JTextField();
+            indepFields[i].setPreferredSize(campoGrande);
+            indepFields[i].setFont(Colores.FUENTE_MATRIX);
             Colores.estilizarCampoTexto(indepFields[i]);
         }
 
-        inputPanel.add(crearPanelCampos());
+        camposPanel = crearPanelCampos();
+        inputPanel.add(camposPanel);
 
         JButton btnResolver = new JButton("Resolver");
         Colores.estilizarBoton(btnResolver);
@@ -59,7 +66,7 @@ public class PanelSistemas extends JPanel {
         acciones.add(btnResolver);
         acciones.add(btnLimpiar);
 
-        resultadoArea = new JTextArea(3, 40);
+        resultadoArea = new JTextArea(5, 40);
         resultadoArea.setEditable(false);
         resultadoArea.setLineWrap(true);
         Colores.estilizarCampoTexto(resultadoArea);
@@ -72,26 +79,72 @@ public class PanelSistemas extends JPanel {
     }
 
     private JPanel crearPanelCampos() {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new GridBagLayout());
         Colores.estilizarPanel(panel);
-        panel.setLayout(new GridLayout(4, 4, 5, 5));
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                panel.add(coefFields[i * 3 + j]);
+        int dim = tipoSistema == null ? 2 : (tipoSistema.getSelectedIndex() == 0 ? 2 : 3);
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(8, 12, 8, 12); // Más espacio alrededor de cada campo
+        c.anchor = GridBagConstraints.CENTER;
+
+        // Etiquetas de matriz
+        JLabel lblCoefs = new JLabel("Coeficientes");
+        lblCoefs.setFont(Colores.FUENTE_MATRIX);
+        c.gridx = 1; c.gridy = 0; c.gridwidth = dim;
+        panel.add(lblCoefs, c);
+
+        JLabel lblIndep = new JLabel("Independientes");
+        lblIndep.setFont(Colores.FUENTE_MATRIX);
+        c.gridx = dim + 3; c.gridy = 0; c.gridwidth = 1;
+        panel.add(lblIndep, c);
+
+        // Campos de la matriz aumentada
+        for (int i = 0; i < dim; i++) {
+            // Corchete izquierdo
+            JLabel corcheteIzq = new JLabel("[");
+            corcheteIzq.setFont(Colores.FUENTE_MATRIX);
+            c.gridx = 0; c.gridy = i + 1; c.gridwidth = 1;
+            panel.add(corcheteIzq, c);
+
+            // Campos de coeficientes
+            for (int j = 0; j < dim; j++) {
+                c.gridx = j + 1;
+                coefFields[i * 3 + j].setVisible(true);
+                panel.add(coefFields[i * 3 + j], c);
             }
-            panel.add(indepFields[i]);
+
+            // Corchete derecho
+            JLabel corcheteDer = new JLabel("]");
+            corcheteDer.setFont(Colores.FUENTE_MATRIX);
+            c.gridx = dim + 1;
+            panel.add(corcheteDer, c);
+
+            // Símbolo igual
+            JLabel igual = new JLabel("=");
+            igual.setFont(Colores.FUENTE_MATRIX);
+            c.gridx = dim + 2;
+            panel.add(igual, c);
+
+            // Campo independiente
+            c.gridx = dim + 3;
+            indepFields[i].setVisible(true);
+            panel.add(indepFields[i], c);
+        }
+        // Esconde los campos no usados en 2x2
+        for (int i = dim; i < 3; i++) {
+            indepFields[i].setVisible(false);
+            for (int j = 0; j < 3; j++) {
+                coefFields[i * 3 + j].setVisible(false);
+            }
         }
         return panel;
     }
 
     private void actualizarCampos() {
-        int dim = tipoSistema.getSelectedIndex() == 0 ? 2 : 3;
-        for (int i = 0; i < 3; i++) {
-            indepFields[i].setVisible(i < dim);
-            for (int j = 0; j < 3; j++) {
-                coefFields[i * 3 + j].setVisible(i < dim && j < dim);
-            }
-        }
+        remove(camposPanel);
+        camposPanel = crearPanelCampos();
+        JPanel northPanel = (JPanel)((BorderLayout)getLayout()).getLayoutComponent(BorderLayout.NORTH);
+        northPanel.remove(1);
+        northPanel.add(camposPanel);
         revalidate();
         repaint();
     }

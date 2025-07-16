@@ -22,3 +22,5 @@ g. División de matrices
 4) Ingresar un sistema de ecuaciones y resolver
 a. Sistema de 2x2
 b. Sistema de 3x3
+
+5) Una mollejita vuelta y vuelta a la plancha es lo mejor que hay.
